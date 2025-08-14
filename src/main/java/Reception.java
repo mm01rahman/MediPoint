@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class Reception extends JFrame {
     private JFrame currentWindow = null;
@@ -145,7 +145,7 @@ public class Reception extends JFrame {
             }
         });
 
-
+        //comment added
         setSize(1550,875);
         getContentPane().setBackground(Color.WHITE);
         setLayout(null);
