@@ -1,7 +1,8 @@
 package org.example;
 
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MainTest {
 
     @BeforeAll
@@ -20,10 +21,10 @@ public class MainTest {
     void tearDown() {
     }
 
-    // --- Ambulance ---
+    // --- Reception ---
     @Test
-    void ambulance_loads() {
-        Ambulance t = new Ambulance();
-        assertNotNull(t);
+    void reception_loads() {
+        Reception r = new Reception();
+        assertNotNull(r);
     }
 }
