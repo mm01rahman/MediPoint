@@ -1,17 +1,20 @@
 package org.example;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 
 public class Reception extends JFrame {
     private JFrame currentWindow = null;
     public Reception(){
 
+        setSize(1550, 875);
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBounds(5,160,1525,670);
         panel.setBackground(new Color(109,164,170));
+        panel.setSize(1550, 875);
         add(panel);
 
         JPanel panel1 = new JPanel();
@@ -147,9 +150,7 @@ public class Reception extends JFrame {
         });
 
         //comment added
-        setSize(1550,875);
         getContentPane().setBackground(Color.WHITE);
-        setLayout(null);
         setVisible(true);
     }
 
