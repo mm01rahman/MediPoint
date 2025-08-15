@@ -2,7 +2,10 @@ package org.example;
 
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.awt.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class MainTest {
 
     @BeforeAll
@@ -23,8 +26,17 @@ public class MainTest {
 
     // --- Reception ---
     @Test
-    void reception_loads() {
+    void reception_tests() {
         Reception r = new Reception();
         assertNotNull(r);
+
+        //Size of Jframe == Panel
+        assertEquals(r.getSize(), r.getContentPane().getComponent(0).getSize());
+        assertNotEquals(Color.BLACK, r.getContentPane().getBackground());
+
+        assertTrue(r.isShowing());
+        r.dispose();
+        assertFalse(r.isShowing());
+
     }
 }
