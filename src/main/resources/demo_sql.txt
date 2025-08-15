@@ -1,0 +1,91 @@
+-- Create the database
+DROP DATABASE IF EXISTS db_hospital;
+CREATE DATABASE db_hospital CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE db_hospital;
+
+-- Table: ambulances
+CREATE TABLE ambulances (
+    vehicle_no VARCHAR(20) NOT NULL,
+    driver_name VARCHAR(100),
+    contact VARCHAR(20),
+    status VARCHAR(20),
+    PRIMARY KEY (vehicle_no)
+);
+
+INSERT INTO ambulances (vehicle_no, driver_name, contact, status) VALUES
+('AMB-101', 'Mohammad Karim', '01711001100', 'Available'),
+('AMB-102', 'Abdul Rahim', '01712002200', 'Busy'),
+('AMB-103', 'Salma Akter', '01833003300', 'Maintenance'),
+('AMB-104', 'Rashedul Islam', '01944004400', 'Available');
+
+-- Table: departments
+CREATE TABLE departments (
+    id INT NOT NULL,
+    name VARCHAR(100),
+    head VARCHAR(100),
+    contact VARCHAR(20),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO departments (id, name, head, contact) VALUES
+(1, 'Cardiology', 'Dr. Sarah Ahmed', '01710000001'),
+(2, 'Neurology', 'Dr. Mahmudul Hasan', '01710000002'),
+(3, 'Oncology', 'Dr. Nafisa Chowdhury', '01710000003'),
+(4, 'Orthopedics', 'Dr. Hasan Imtiaz', '01710000004'),
+(5, 'Pediatrics', 'Dr. Shamsun Nahar', '01710000005');
+
+-- Table: patients
+CREATE TABLE patients (
+    id INT NOT NULL AUTO_INCREMENT,
+    document VARCHAR(50),
+    number VARCHAR(50),
+    name VARCHAR(100),
+    gender VARCHAR(10),
+    disease VARCHAR(100),
+    room VARCHAR(20),
+    bill DOUBLE,
+    contact VARCHAR(20),
+    time DATE,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO patients (id, document, number, name, gender, disease, room, bill, contact, time) VALUES
+(1, 'Passport', 'A9876543', 'Sadia Jahan', 'Female', 'Flu', 'GEN-101', 1200, '01719999999', '2025-07-29'),
+(2, 'NID', '1987654321', 'Faisal Ahmed', 'Male', 'Covid-19', 'ICU-01', 5000, '01819999988', '2025-07-29'),
+(3, 'NID', '1999999999', 'Jahidul Islam', 'Male', 'Broken Arm', 'PRI-201', 3000, '01718888888', '2025-07-29'),
+(4, 'Passport', 'B1234567', 'Nusrat Faria', 'Female', 'Malaria', 'SEM-301', 2000, '01618888888', '2025-07-29'),
+(5, 'Passport', 'A1234567', 'Rahim Uddin', 'Male', 'Dengue', 'DEL-403', 4000, '01711111111', '2025-07-29'),
+(6, 'NID', '2000000000', 'Shafiqul Islam', 'Male', 'Heart Attack', 'ICU-02', 5000, '01519999999', '2025-07-29');
+
+-- Table: rooms
+CREATE TABLE rooms (
+    room_no VARCHAR(20) NOT NULL,
+    availability VARCHAR(20),
+    price DOUBLE,
+    type VARCHAR(50),
+    PRIMARY KEY (room_no)
+);
+
+INSERT INTO rooms (room_no, availability, price, type) VALUES
+('DEL-401', 'Available', 4000.0, 'Deluxe'),
+('DEL-402', 'Available', 4000.0, 'Deluxe'),
+('DEL-403', 'Occupied', 4000.0, 'Deluxe'),
+('GEN-101', 'Occupied', 1200.0, 'General Ward'),
+('GEN-102', 'Available', 1200.0, 'General Ward'),
+('ICU-01', 'Occupied', 5000.0, 'ICU'),
+('ICU-02', 'Occupied', 5000.0, 'ICU'),
+('PRI-201', 'Occupied', 3000.0, 'Private'),
+('PRI-202', 'Available', 3000.0, 'Private'),
+('SEM-301', 'Occupied', 2000.0, 'Semi-Private'),
+('SEM-302', 'Available', 2000.0, 'Semi-Private');
+
+-- Table: users
+CREATE TABLE users (
+    id INT NOT NULL,
+    username VARCHAR(50),
+    password VARCHAR(50),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO users (id, username, password) VALUES
+(1, 'mm01rahman', '12345678');
