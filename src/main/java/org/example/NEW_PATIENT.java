@@ -193,9 +193,9 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         }
     }
 
-    public boolean IsIntegar(String str) {
+    public boolean IsDouble(String str) {
         try {
-            Integer.parseInt(str); // Try to parse
+            Double.parseDouble(str); // Try to parse
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -211,7 +211,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
                         roomChoice.getSelectedItem() == null ||
                         textFieldBill.getText().isEmpty() ||
                         contactField.getText().isEmpty() ||
-                        !IsIntegar(textFieldBill.getText())
+                        !IsDouble(textFieldBill.getText())
         ) {
             JOptionPane.showMessageDialog(this, "Please fill all fields correctly.");
         } else {
