@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class NEW_PATIENT extends JFrame implements ActionListener {
@@ -190,6 +193,15 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         }
     }
 
+    public boolean IsIntegar(String str) {
+        try {
+            Integer.parseInt(str); // Try to parse
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (
                 textFieldNumber.getText().isEmpty() ||
@@ -198,9 +210,10 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
                         textFieldDisease.getText().isEmpty() ||
                         roomChoice.getSelectedItem() == null ||
                         textFieldBill.getText().isEmpty() ||
-                        contactField.getText().isEmpty()
+                        contactField.getText().isEmpty() ||
+                        !IsIntegar(textFieldBill.getText())
         ) {
-            JOptionPane.showMessageDialog(this, "Please fill all fields.");
+            JOptionPane.showMessageDialog(this, "Please fill all fields correctly.");
         } else {
             saveItem();
         }
