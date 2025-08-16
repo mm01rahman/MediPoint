@@ -63,5 +63,42 @@ public class MainTest {
         assertFalse(np.isShowing());
     }
 
+    @Test
+    public void testSearchRoomUIComponents() {
+        SearchRoom searchRoom = new SearchRoom();
+
+        assertNotNull(searchRoom.choice, "Choice dropdown should be created");
+        assertNotNull(searchRoom.table, "Table should be created");
+        assertNotNull(searchRoom.model, "Table model should be created");
+
+        searchRoom.dispose();
+    }
+
+    @Test
+    public void testSearchRoomSearchWithAvailable() {
+        SearchRoom searchRoom = new SearchRoom();
+        searchRoom.choice.select("Available");
+
+        // Needs DBConnection + rooms table!
+        Assertions.assertDoesNotThrow(() -> searchRoom.searchRoom(),
+                "searchRoom() should not throw an exception when querying Available");
+
+        searchRoom.dispose();
+    }
+
+    @Test
+    void testSearchRoomNoResults() {
+        SearchRoom searchRoom = new SearchRoom();
+        searchRoom.choice.select("Occupied");
+
+        // Needs DBConnection + rooms table!
+        searchRoom.searchRoom();
+
+        assertEquals(0, searchRoom.model.getRowCount(),
+                "Should return no rows if no Occupied rooms in DB");
+
+        searchRoom.dispose();
+    }
+
 
 }

@@ -77,7 +77,7 @@ public class SearchRoom extends JFrame {
         setVisible(true);
     }
 
-    private void searchRoom() {
+    public void searchRoom() {
         try {
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM rooms WHERE availability = ?");
