@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 
 public class SearchRoom extends JFrame {
 
+    public Object room;
     Choice choice;
     JTable table;
     DefaultTableModel model;

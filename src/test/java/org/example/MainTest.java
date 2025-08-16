@@ -113,5 +113,20 @@ public class MainTest {
         room.dispose(); // Close frame
     }
 
+    @Test
+    void testTableColumns() {
+        ALL_Patient_Info frame = new ALL_Patient_Info();
+        String[] expectedColumns = {
+                "ID", "Document", "Number", "Name", "Gender",
+                "Disease", "Room", "Entry Time", "Bill", "Contact"
+        };
+
+        for (int i = 0; i < expectedColumns.length; i++) {
+            assertEquals(expectedColumns[i], frame.model.getColumnName(i), "Column name should match");
+        }
+
+        frame.dispose();
+    }
+
 
 }
