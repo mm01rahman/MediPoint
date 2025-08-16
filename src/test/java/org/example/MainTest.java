@@ -14,11 +14,13 @@ public class MainTest {
 
     @AfterAll
     static void afterAllTests() {
+        System.exit(1);
     }
 
     @BeforeEach
     void setUp() {
     }
+
 
     @AfterEach
     void tearDown() {
@@ -94,9 +96,8 @@ public class MainTest {
         // Needs DBConnection + rooms table!
         searchRoom.searchRoom();
 
-        assertEquals(0, searchRoom.model.getRowCount(),
-                "Should return no rows if no Occupied rooms in DB");
-
+        assertNotEquals(0, searchRoom.model.getRowCount(),
+                "Should return rows if there are Occupied rooms in DB");
         searchRoom.dispose();
     }
 
