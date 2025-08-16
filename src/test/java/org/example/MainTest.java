@@ -114,6 +114,7 @@ public class MainTest {
         room.dispose(); // Close frame
     }
 
+    //check Table Column
     @Test
     void testTableColumns() {
         ALL_Patient_Info frame = new ALL_Patient_Info();
@@ -143,4 +144,23 @@ public class MainTest {
         frame.dispose();
     }
 
+    @Test
+    void testLoginInitialization() {
+        Login login = new Login();
+
+        // Check frame is not null
+        assertNotNull(login);
+
+        // Check components
+        assertNotNull(login.textField, "Username field should exist");
+        assertNotNull(login.jPasswordField, "Password field should exist");
+        assertNotNull(login.b1, "Login button should exist");
+        assertNotNull(login.b2, "Cancel button should exist");
+
+        // Check frame visibility
+        assertTrue(login.isShowing(), "Login frame should be visible initially");
+
+        login.dispose();
+        assertFalse(login.isShowing(), "Login frame should be hidden after dispose");
+    }
 }
