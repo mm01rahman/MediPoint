@@ -219,7 +219,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         }
     }
 
-    private void clearFields() {
+    public void clearFields() {
         comboBox.setSelectedIndex(0);
         textFieldNumber.setText("");
         textName.setText("");
@@ -232,7 +232,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         contactField.setText("");
     }
 
-    private void closeFields() {
+    public void closeFields() {
         clearFields();
         dispose();
     }
