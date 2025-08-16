@@ -100,5 +100,18 @@ public class MainTest {
         searchRoom.dispose();
     }
 
+    @Test
+    void testRoomInitialization() {
+        // Create Room frame
+        Room room = new Room();
+
+        // Basic checks
+        assertNotNull(room.table, "Table should be created");
+        assertNotNull(room.model, "Table model should be created");
+        assertEquals(4, room.model.getColumnCount(), "Table should have 4 columns");
+
+        room.dispose(); // Close frame
+    }
+
 
 }
