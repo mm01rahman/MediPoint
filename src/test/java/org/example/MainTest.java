@@ -39,4 +39,29 @@ public class MainTest {
         assertFalse(r.isShowing());
 
     }
+
+    @Test
+    void NewPateint_tests() {
+        NEW_PATIENT np = new NEW_PATIENT();
+
+        assertNotNull(np);
+        assertTrue(np.isShowing());
+        assertTrue(np.isVisible());
+
+        assertEquals(new Color(90, 156, 163), np.getContentPane().getComponent(0).getBackground());
+        assertEquals(new Dimension(850, 550), np.getContentPane().getSize());
+
+        np.textFieldBill.setText("Only int should be input");
+        assertFalse(np.IsDouble(np.textFieldBill.getText()));
+
+        np.clearFields();
+        assertNull(np.getGender());
+
+        assertDoesNotThrow(() -> np.b2.doClick());
+
+        np.b3.doClick();
+        assertFalse(np.isShowing());
+    }
+
+
 }
