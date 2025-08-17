@@ -163,4 +163,16 @@ public class MainTest {
         login.dispose();
         assertFalse(login.isShowing(), "Login frame should be hidden after dispose");
     }
+
+//    @Test
+//    void testCancelButtonExits() {
+//        Login login = new Login();
+//
+//        // Cancel button calls System.exit(0)
+//        // We cannot test System.exit directly; we can test actionPerformed method with a mock
+//        assertDoesNotThrow(() -> login.actionPerformed(null), "Cancel button action should not throw exception");
+//
+//        login.dispose();
+//    }
+
 }
