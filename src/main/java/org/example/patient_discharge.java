@@ -118,7 +118,7 @@ public class patient_discharge extends JFrame {
         }
     }
 
-    private void checkPatient() {
+    void checkPatient() {
         try {
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT room, time, bill FROM patients WHERE id = ?");
@@ -141,7 +141,7 @@ public class patient_discharge extends JFrame {
     }
 
 
-    private void dischargePatient() {
+    void dischargePatient() {
         try {
             if (Bill == null) {
                 JOptionPane.showMessageDialog(this, "Please check patient info first.");

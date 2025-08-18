@@ -1,8 +1,11 @@
 package org.example;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import java.awt.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -175,4 +178,88 @@ public class MainTest {
 //        login.dispose();
 //    }
 
+
+    //Value Source Test For paitant discharge
+//    @ParameterizedTest
+//    @ValueSource(strings = {"101", "202", "303"})
+//    public void testCheckPatientWithDifferentIDs(String patientId) {
+//        patient_discharge frame = new patient_discharge();
+//
+//        frame.choice.add(patientId);
+//        frame.choice.select(patientId);
+//
+//        assertDoesNotThrow(() -> frame.checkPatient(),
+//                "checkPatient() should not throw for ID: " + patientId);
+//
+//        frame.dispose();
+//    }
+
+//    @ParameterizedTest
+//    @CsvSource({
+//            "101, RoomA, 500",
+//            "202, RoomB, 0",
+//            "303, RoomC, -10"
+//    })
+//    public void testPatientDataMapping(String id, String room, int bill) {
+//        patient_discharge frame = new patient_discharge();
+//
+//        // Simulate DB result
+//        frame.RNo.setText(room);
+//        frame.Bill = bill;
+//
+//        assertEquals(room, frame.RNo.getText(), "Room number should match");
+//        assertTrue(bill >= -10, "Bill should be valid test input");
+//
+//        frame.dispose();
+//    }
+
+//    @ParameterizedTest
+//    @CsvFileSource(resources = "/res.csv", numLinesToSkip = 1)
+//    void testDischargeWithCsvFile(String id, String room, int bill) {
+//        patient_discharge frame = new patient_discharge();
+//
+//        frame.choice.add(id);
+//        frame.choice.select(id);
+//        frame.RNo.setText(room);
+//        frame.Bill = bill;
+//
+//        if (bill <= 0) {
+//            assertDoesNotThrow(frame::dischargePatient,
+//                    "Patient should discharge if bill is cleared or negative");
+//        } else {
+//            frame.dischargePatient();
+//            assertEquals(bill, frame.Bill, "Unpaid bill should remain");
+//        }
+//
+//        frame.dispose();
+//    }
+
+//    static Stream<Arguments> providePatients() {
+//        return Stream.of(
+//                Arguments.of("101", "RoomX", 0),
+//                Arguments.of("202", "RoomY", 200),
+//                Arguments.of("303", "RoomZ", -50)
+//        );
+//    }
+//
+//    @ParameterizedTest
+//    @MethodSource("providePatients")
+//    void testDischargeWithMethodSource(String id, String room, int bill) {
+//        patient_discharge frame = new patient_discharge();
+//
+//        frame.choice.add(id);
+//        frame.choice.select(id);
+//        frame.RNo.setText(room);
+//        frame.Bill = bill;
+//
+//        if (bill <= 0) {
+//            frame.dischargePatient();
+//            assertNull(frame.Bill, "Bill should reset after discharge");
+//        } else {
+//            frame.dischargePatient();
+//            assertNotNull(frame.Bill, "Unpaid bill should block discharge");
+//        }
+//
+//        frame.dispose();
+//    }
 }
