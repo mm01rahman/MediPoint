@@ -16,8 +16,7 @@ public class DBConnection {
                 String password = "";
                 con = DriverManager.getConnection(url, user, password);
             } catch (ClassNotFoundException e) {
-                System.err.println("MySQL JDBC Driver not found.");
-                e.printStackTrace();
+                throw new SQLException("MySQL JDBC Driver not found.", e);
             }
         }
         return con;
