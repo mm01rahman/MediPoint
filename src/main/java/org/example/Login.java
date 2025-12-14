@@ -3,7 +3,9 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
+import org.example.core.AppContext;
+import org.example.facade.HospitalFacade;
+
 import java.util.Arrays;
 
 public class Login extends JFrame implements ActionListener {
@@ -63,27 +65,22 @@ public class Login extends JFrame implements ActionListener {
         char[] passwordChars = jPasswordField.getPassword();
         String password = new String(passwordChars);
 
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
-
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    JOptionPane.showMessageDialog(this, "Login Successful");
-                    dispose();
-                    SwingUtilities.invokeLater(() -> new Reception());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Invalid credentials");
-                }
-            }
-
-        } catch (SQLException ex) {
+        HospitalFacade facade = AppContext.getInstance().getHospitalFacade();
+        boolean authenticated = false;
+        try {
+            authenticated = facade.authenticate(username, password);
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Database error occurred.");
-            ex.printStackTrace();
         } finally {
             Arrays.fill(passwordChars, '\0');
+        }
+
+        if (authenticated) {
+            JOptionPane.showMessageDialog(this, "Login Successful");
+            dispose();
+            SwingUtilities.invokeLater(Reception::new);
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid credentials");
         }
     }
 

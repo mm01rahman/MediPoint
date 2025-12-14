@@ -1,14 +1,19 @@
 package org.example;
 
+import org.example.command.AddPatientCommand;
+import org.example.core.AppContext;
+import org.example.facade.HospitalFacade;
+import org.example.memento.PatientFormCaretaker;
+import org.example.memento.PatientFormMemento;
+import org.example.model.Patient;
+import org.example.model.RoomInfo;
+import org.example.strategy.ValidationStrategy;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class NEW_PATIENT extends JFrame implements ActionListener {
     JComboBox comboBox;
@@ -16,6 +21,8 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
     JRadioButton r1, r2;
     JButton b1, b2, b3;
     Choice roomChoice;
+    private final HospitalFacade facade = AppContext.getInstance().getHospitalFacade();
+    private final PatientFormCaretaker caretaker = new PatientFormCaretaker();
 
     NEW_PATIENT() {
         JPanel panel = new JPanel();
@@ -102,6 +109,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         roomChoice.setBounds(271, 274, 150, 20);
         panel.add(roomChoice);
         loadAvailableRooms(roomChoice);
+        facade.register(patient -> loadAvailableRooms(roomChoice));
 
         JLabel labelBill = new JLabel("Bill :");
         labelBill.setBounds(35, 316, 200, 14);
@@ -155,71 +163,53 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         return r1.isSelected() ? "Male" : (r2.isSelected() ? "Female" : null);
     }
 
-    private void saveItem() {
+    private Patient createPatientFromForm() {
+        double bill;
         try {
-            Connection con = DBConnection.getConnection();
-            con.setAutoCommit(false);
-
-            String selectedRoom = roomChoice.getSelectedItem();
-
-            // Insert patient
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO patients(document, number, name, gender, disease, room, bill, contact, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            );
-            ps.setString(1, (String) comboBox.getSelectedItem());
-            ps.setString(2, textFieldNumber.getText());
-            ps.setString(3, textName.getText());
-            ps.setString(4, getGender());
-            ps.setString(5, textFieldDisease.getText());
-            ps.setString(6, selectedRoom);
-            ps.setDouble(7, Double.parseDouble(textFieldBill.getText()));
-            ps.setString(8, contactField.getText());
-            ps.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
-            ps.executeUpdate();
-
-            // Update room availability
-            PreparedStatement roomUpdate = con.prepareStatement(
-                    "UPDATE rooms SET availability = 'Occupied' WHERE room_no = ?"
-            );
-            roomUpdate.setString(1, selectedRoom);
-            roomUpdate.executeUpdate();
-
-            con.commit();
-
-            JOptionPane.showMessageDialog(this, "Patient Added & Room Marked as Occupied!");
-            clearFields();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            bill = Double.parseDouble(textFieldBill.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Bill should be numeric");
+            return null;
         }
+        return facade.getFactory().createPatient(
+                (String) comboBox.getSelectedItem(),
+                textFieldNumber.getText(),
+                textName.getText(),
+                getGender(),
+                textFieldDisease.getText(),
+                roomChoice.getSelectedItem(),
+                bill,
+                contactField.getText()
+        );
     }
 
-    public boolean IsDouble(String str) {
-        try {
-            Double.parseDouble(str); // Try to parse
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+    private void saveItem() {
+        Patient patient = createPatientFromForm();
+        if (patient == null) {
+            return;
         }
+        ValidationStrategy validationStrategy = facade.getValidationStrategy();
+        AddPatientCommand command = new AddPatientCommand(facade, patient, validationStrategy, caretaker);
+        command.execute();
+        caretaker.saveState(new PatientFormMemento(patient));
+        clearFields();
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (
-                textFieldNumber.getText().isEmpty() ||
-                        textName.getText().isEmpty() ||
-                        getGender() == null ||
-                        textFieldDisease.getText().isEmpty() ||
-                        roomChoice.getSelectedItem() == null ||
-                        textFieldBill.getText().isEmpty() ||
-                        contactField.getText().isEmpty() ||
-                        !IsDouble(textFieldBill.getText())
-        ) {
-            JOptionPane.showMessageDialog(this, "Please fill all fields correctly.");
-        } else {
-            saveItem();
-        }
+        saveItem();
     }
 
     public void clearFields() {
+        caretaker.saveState(new PatientFormMemento(facade.getFactory().createPatient(
+                (String) comboBox.getSelectedItem(),
+                textFieldNumber.getText(),
+                textName.getText(),
+                getGender(),
+                textFieldDisease.getText(),
+                roomChoice.getSelectedItem(),
+                textFieldBill.getText().isEmpty() ? 0.0 : Double.parseDouble(textFieldBill.getText()),
+                contactField.getText()
+        )));
         comboBox.setSelectedIndex(0);
         textFieldNumber.setText("");
         textName.setText("");
@@ -238,12 +228,11 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
     }
 
     private void loadAvailableRooms(Choice roomChoice) {
+        roomChoice.removeAll();
         try {
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT room_no FROM rooms WHERE availability = 'Available'");
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                roomChoice.add(rs.getString("room_no"));
+            List<RoomInfo> rooms = facade.fetchAvailableRooms();
+            for (RoomInfo room : rooms) {
+                roomChoice.add(room.getRoomNo());
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading rooms: " + e.getMessage());
